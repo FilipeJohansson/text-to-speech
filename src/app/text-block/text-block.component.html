@@ -109,11 +109,9 @@
                     <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
                         @for (audio of block().audioUrls; track $index) {
                             <tts-audio-track 
-                                [url]="audio.url"
-                                [name]="'Audio ' + ($index + 1)"
-                                [voiceColor]="audio.voiceColor"
+                                [audio]="audio"
                                 (play)="playAudio(audio.url)"
-                                (download)="downloadAudio(audio.url, 'Audio ' + ($index + 1))"
+                                (download)="downloadAudio(audio)"
                                 (delete)="deleteAudio($index)"
                             />
                         }

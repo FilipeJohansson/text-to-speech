@@ -57,6 +57,15 @@ export class TextBlockComponent {
     this.isGenerating.set(true);
 
     const voiceColor: string = this.block().voice.color;
+    const nameBase: string = this.block().content.slice(0, 25);
+
+    let name = nameBase;
+    let counter = 1;
+    
+    while (this.block().audioUrls.some(audio => audio.name === name)) {
+      name = `${nameBase} (${counter})`;
+      counter++;
+    }
 
     return this.#textToSpeechService.synthesize$(this.block().content, this.block().voice.id)
       .pipe(
@@ -65,7 +74,7 @@ export class TextBlockComponent {
       )
       .subscribe({
         next: (audioBlob: Blob) => {
-          const newAudio: AudioUrl = { url: URL.createObjectURL(audioBlob), voiceColor };
+          const newAudio: AudioUrl = { name, url: URL.createObjectURL(audioBlob), voiceColor };
           this.update.emit({ ...this.block(), audioUrls: [...this.block().audioUrls, newAudio] });
         },
         error: (e) => console.error('Error to syntesize text to speech', e),
@@ -108,10 +117,10 @@ export class TextBlockComponent {
     audio.play();
   }
 
-  protected downloadAudio(url: string, filename: string): void {
+  protected downloadAudio(audio: AudioUrl): void {
     const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
+    a.href = audio.url;
+    a.download = audio.name;
 
     document.body.appendChild(a);
     a.click();

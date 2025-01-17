@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, ElementRef, input, InputSignal, output, OutputEmitterRef, Signal, signal, viewChild, WritableSignal } from '@angular/core';
 import { Download, LucideAngularModule, Pause, Play, Trash2 } from 'lucide-angular';
 
-export interface AudioUrl { url: string, voiceColor: string };
+export interface AudioUrl { name:string, url: string, voiceColor: string };
 
 @Component({
   selector: 'tts-audio-track',
@@ -16,9 +16,7 @@ export class AudioTrackComponent {
   readonly DownloadIcon = Download;
   readonly TrashIcon = Trash2;
 
-  url: InputSignal<string> = input.required<string>();
-  name: InputSignal<string> = input.required<string>();
-  voiceColor: InputSignal<string> = input.required<string>();
+  audio: InputSignal<AudioUrl> = input.required<AudioUrl>();
 
   play: OutputEmitterRef<void> = output();
   download: OutputEmitterRef<void> = output();
