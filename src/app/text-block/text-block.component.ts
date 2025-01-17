@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, input, InputSignal, output, OutputEmitterRef, Signal, signal, viewChild, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, input, InputSignal, output, OutputEmitterRef, Signal, signal, viewChild, WritableSignal } from '@angular/core';
 import { LucideAngularModule, X, Play, Loader2 } from 'lucide-angular';
 import { AudioTrackComponent, AudioUrl } from '../audio-track/audio-track.component';
-import { Voice, VoiceIndicatorComponent, voices } from '../voice-indicator/voice-indicator.component';
+import { Voice, VoiceIndicatorComponent } from '../voice-indicator/voice-indicator.component';
+import { TextToSpeechService } from '../text-to-speech.service';
+import { finalize, take } from 'rxjs';
 
 export interface TextBlock {
   id: number
@@ -20,13 +22,14 @@ export interface TextBlock {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextBlockComponent {
+  #textToSpeechService: TextToSpeechService = inject(TextToSpeechService);
+
   readonly XIcon = X;
   readonly PlayIcon = Play;
   readonly LoaderIcon = Loader2;
 
-  readonly voices: Voice[] = voices;
-
   block: InputSignal<TextBlock> = input.required<TextBlock>();
+  voices: InputSignal<Voice[]> = input.required<Voice[]>();
   focus: InputSignal<boolean> = input.required<boolean>();
 
   canNotDelete: InputSignal<boolean | undefined> = input<boolean>();
@@ -48,15 +51,30 @@ export class TextBlockComponent {
     });
   }
 
+  protected handleUpdateText(updateTextEvent: Event): void {
+    const content: string = (updateTextEvent.target as HTMLTextAreaElement).value;
+    this.update.emit({ ...this.block(), content });
+  }
+
   protected handleGenerate(): void {
+    if (!this.block().content) return;
+
     this.isGenerating.set(true);
 
-    setTimeout(() => {
-      const newAudio: AudioUrl = { url: '', voiceColor: this.block().voice.color }; 
-      this.update.emit({ ...this.block(), audioUrls: [...this.block().audioUrls, newAudio ] });
+    const voiceColor: string = this.block().voice.color;
 
-      this.isGenerating.set(false);
-    }, 1000);
+    this.#textToSpeechService.synthesize$(this.block().content, this.block().voice.id)
+      .pipe(
+        take(1),
+        finalize(() => this.isGenerating.set(false)),
+      )
+      .subscribe({
+        next: (audioBlob: Blob) => {
+          const newAudio: AudioUrl = { url: URL.createObjectURL(audioBlob), voiceColor };
+          this.update.emit({ ...this.block(), audioUrls: [...this.block().audioUrls, newAudio] });
+        },
+        error: (e) => console.error('Error to syntesize text to speech', e),
+      });
   }
 
   protected handleKeyDown(e: KeyboardEvent): void {
@@ -81,7 +99,7 @@ export class TextBlockComponent {
 
   protected handleSelectVoice(selectEvent: Event): void {
     const voiceId: string = (selectEvent.target as HTMLSelectElement).value;
-    const selectedVoice = this.voices.find((v: Voice) => v.id === voiceId);
+    const selectedVoice = this.voices().find((v: Voice) => v.id === voiceId);
     if (selectedVoice) this.update.emit({ ...this.block(), voice: selectedVoice });
   }
 

@@ -24,6 +24,7 @@
                         focus:border-[#FF0080] focus:ring-[#FF0080] text-white
                     "
                     placeholder="Enter your text here..."
+                    (input)="handleUpdateText($event)"
                     (keydown)="handleKeyDown($event)"></textarea>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -74,7 +75,7 @@
                             placeholder="Select a Voice"
                             (change)="handleSelectVoice($event)"
                         >
-                            @for (voice of voices; track $index) {
+                            @for (voice of voices(); track $index) {
                                 <option [value]="voice.id" [selected]="block().voice.id === voice.id">
                                     <div class="flex items-center space-x-2">
                                         <div class="w-3 h-3 rounded-full" [style.background-color]="voice.color"></div>

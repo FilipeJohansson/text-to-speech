@@ -23,6 +23,7 @@
 						@for (block of blocks(); track $index) {
 							<tts-text-block
 								[block]="block"
+								[voices]="voices()"
 								[focus]="focusedBlockId() === block.id"
 								[canNotDelete]="$index === 0"
 								(update)="handleUpdateBlock($event)"
