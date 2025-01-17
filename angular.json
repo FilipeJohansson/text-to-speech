@@ -1,14 +1,27 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "schematics": {
+    "@schematics/angular": {
+      "component": {
+        "changeDetection": "OnPush"
+      }
+    }
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "text-to-speech": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular": {
+          "component": {
+            "changeDetection": "OnPush"
+          }
+        }
+      },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
+      "prefix": "tts",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
@@ -16,9 +29,7 @@
             "outputPath": "dist/text-to-speech",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": [],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -73,10 +84,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": [],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {

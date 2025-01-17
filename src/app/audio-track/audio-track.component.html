@@ -1,0 +1,53 @@
+<div class="space-y-1">
+    <span class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-zinc-400">
+        {{ name() }}
+    </span>
+    <div class="flex items-center space-x-2">
+        <div class="w-3 h-3 rounded-full" [style.background-color]="voiceColor()"></div>
+        <button
+            class="
+                inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background
+                transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+                disabled:pointer-events-none disabled:opacity-50 h-10 w-10 text-[#FF0080] hover:text-white hover:bg-[#FF0080]
+            "
+            (click)="togglePlayPause()">
+            @if (isPlaying()) {
+                <lucide-icon class="h-4 w-4" [img]="PauseIcon" />
+            } @else {
+                <lucide-icon class="h-4 w-4" [img]="PlayIcon" />
+            }
+        </button>
+        <progress
+            class="flex-grow h-1 [&::-webkit-progress-bar]:rounded-full
+                [&::-webkit-progress-bar]:bg-zinc-700 [&::-webkit-progress-value]:rounded-full
+                [&::-webkit-progress-value]:bg-[#FF0080] [&::-moz-progress-bar]:rounded-full
+                [&::-moz-progress-bar]:bg-[#FF0080]"
+            [max]="duration()"
+            [value]="currentTime()"
+        ></progress>
+        <button 
+            class="
+                inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background
+                transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+                disabled:pointer-events-none disabled:opacity-50 h-10 w-10 text-[#FF0080] hover:text-white hover:bg-[#FF0080]
+            "
+            (click)="download.emit()">
+            <lucide-icon class="h-4 w-4" [img]="DownloadIcon" />
+        </button>
+        <button 
+            class="
+                inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background
+                transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+                disabled:pointer-events-none disabled:opacity-50 h-10 w-10 text-red-500 hover:text-white hover:bg-red-500
+            "
+            (click)="delete.emit()">
+            <lucide-icon class="h-4 w-4" [img]="TrashIcon" />
+        </button>
+        <audio
+            #audioRef
+            [src]="url()"
+            (timeupdate)="handleTimeUpdate($event)"
+            (loadedmetadata)="handleLoadedMetadata($event)"
+        ></audio>
+    </div>
+</div>
