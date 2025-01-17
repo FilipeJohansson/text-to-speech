@@ -51,12 +51,7 @@ export class TextBlockComponent {
     });
   }
 
-  protected handleUpdateText(updateTextEvent: Event): void {
-    const content: string = (updateTextEvent.target as HTMLTextAreaElement).value;
-    this.update.emit({ ...this.block(), content });
-  }
-
-  protected handleGenerate(): void {
+  public handleGenerate(): void {
     if (!this.block().content) return;
 
     this.isGenerating.set(true);
@@ -75,6 +70,11 @@ export class TextBlockComponent {
         },
         error: (e) => console.error('Error to syntesize text to speech', e),
       });
+  }
+
+  protected handleUpdateText(updateTextEvent: Event): void {
+    const content: string = (updateTextEvent.target as HTMLTextAreaElement).value;
+    this.update.emit({ ...this.block(), content });
   }
 
   protected handleKeyDown(e: KeyboardEvent): void {

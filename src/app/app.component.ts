@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, viewChildren, WritableSignal } from '@angular/core';
 import { TextBlock, TextBlockComponent } from "./text-block/text-block.component";
 import { LucideAngularModule, Play, Download } from 'lucide-angular';
 import { Voice } from './voice-indicator/voice-indicator.component';
@@ -21,6 +21,8 @@ export class AppComponent {
   voices: WritableSignal<Voice[]> = signal([]);
   blocks: WritableSignal<TextBlock[]> = signal([]);
   focusedBlockId: WritableSignal<number> = signal(0);
+
+  textBlockComponents = viewChildren(TextBlockComponent);
 
   constructor() {
     this.#textToSpeechService.getVoices$()
@@ -54,7 +56,7 @@ export class AppComponent {
   }
 
   protected handleGenerateAll(): void {
-    throw new Error("Not implemented.");
+    this.textBlockComponents().forEach((textBlockComponent: TextBlockComponent) => textBlockComponent.handleGenerate());
   }
 
   protected handleExportAll(): void {

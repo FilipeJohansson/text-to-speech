@@ -5,18 +5,31 @@
 				Text to Speech Synthesizer
 			</h1>
 			<div class="space-x-4">
-				<button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary hover:bg-primary/90 h-10 px-4 py-2 bg-gradient-to-r from-[#FF00FF] to-[#FF0080] hover:opacity-90 text-white">
+				<button
+					class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm
+					font-medium ring-offset-background transition-colors focus-visible:outline-none
+					focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+					disabled:pointer-events-none disabled:opacity-50 bg-primary hover:bg-primary/90 h-10
+					px-4 py-2 bg-gradient-to-r from-[#FF00FF] to-[#FF0080] hover:opacity-90 text-white"
+					(click)="handleGenerateAll()"
+				>
 					<lucide-icon class="mr-2 h-4 w-4" [img]="PlayIcon" />
 					Generate All
 				</button>
-				<button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border bg-white bg-background h-10 px-4 py-2 border-[#FF0080] text-[#FF0080] hover:bg-[#FF0080] hover:text-white">
+				<button
+					class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm
+					font-medium ring-offset-background transition-colors focus-visible:outline-none
+					focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+					disabled:pointer-events-none disabled:opacity-50 border bg-white bg-background h-10
+					px-4 py-2 border-[#FF0080] text-[#FF0080] hover:bg-[#FF0080] hover:text-white"
+				>
 					<lucide-icon class="mr-2 h-4 w-4" [img]="DownloadIcon" />
 					Export
 				</button>
 			</div>
 		</div>
 
-		<div class="relative overflow-auto h-[calc(100vh-8rem)] w-full"> <!-- scroll area -->
+		<div class="relative overflow-auto h-[calc(100vh-8rem)] w-full">
 			<div class="h-full w-full rounded-[inherit]">
 				<div style="min-width: 100%; display: table;">
 					<div class="flex flex-col gap-1 space-y-4 pr-4">
@@ -35,6 +48,6 @@
 					</div>
 				</div>
 			</div>
-		</div> <!-- end scroll area -->
+		</div>
 	</div>
 </div>
