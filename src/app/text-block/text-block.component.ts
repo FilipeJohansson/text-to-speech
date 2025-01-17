@@ -3,7 +3,7 @@ import { LucideAngularModule, X, Play, Loader2 } from 'lucide-angular';
 import { AudioTrackComponent, AudioUrl } from '../audio-track/audio-track.component';
 import { Voice, VoiceIndicatorComponent } from '../voice-indicator/voice-indicator.component';
 import { TextToSpeechService } from '../text-to-speech.service';
-import { finalize, take } from 'rxjs';
+import { finalize, Subscription, take } from 'rxjs';
 
 export interface TextBlock {
   id: number
@@ -51,14 +51,14 @@ export class TextBlockComponent {
     });
   }
 
-  public handleGenerate(): void {
-    if (!this.block().content) return;
+  public handleGenerate(): Subscription {
+    if (!this.block().content) return new Subscription;
 
     this.isGenerating.set(true);
 
     const voiceColor: string = this.block().voice.color;
 
-    this.#textToSpeechService.synthesize$(this.block().content, this.block().voice.id)
+    return this.#textToSpeechService.synthesize$(this.block().content, this.block().voice.id)
       .pipe(
         take(1),
         finalize(() => this.isGenerating.set(false)),

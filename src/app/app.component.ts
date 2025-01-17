@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal, viewChildren, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal, signal, viewChildren, WritableSignal } from '@angular/core';
 import { TextBlock, TextBlockComponent } from "./text-block/text-block.component";
-import { LucideAngularModule, Play, Download } from 'lucide-angular';
+import { LucideAngularModule, Loader2, Play, Download } from 'lucide-angular';
 import { Voice } from './voice-indicator/voice-indicator.component';
 import { TextToSpeechService, WatsonTTSVoice, WatsonTTSVoices } from './text-to-speech.service';
-import { take } from 'rxjs';
+import { combineLatest, finalize, Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'tts-root',
@@ -17,12 +17,15 @@ export class AppComponent {
 
   readonly PlayIcon = Play;
   readonly DownloadIcon = Download;
+  readonly LoaderIcon = Loader2;
 
   voices: WritableSignal<Voice[]> = signal([]);
   blocks: WritableSignal<TextBlock[]> = signal([]);
   focusedBlockId: WritableSignal<number> = signal(0);
 
-  textBlockComponents = viewChildren(TextBlockComponent);
+  textBlockComponents: Signal<readonly TextBlockComponent[]> = viewChildren(TextBlockComponent);
+
+  isGeneratingAll: WritableSignal<boolean> = signal(false);
 
   constructor() {
     this.#textToSpeechService.getVoices$()
@@ -56,7 +59,16 @@ export class AppComponent {
   }
 
   protected handleGenerateAll(): void {
-    this.textBlockComponents().forEach((textBlockComponent: TextBlockComponent) => textBlockComponent.handleGenerate());
+    this.isGeneratingAll.set(true);
+
+    const subscriptions: Subscription[] = this.textBlockComponents()
+      .map((textBlockComponent: TextBlockComponent): Subscription =>
+        textBlockComponent.handleGenerate()
+      );
+
+    combineLatest([subscriptions])
+      .pipe(finalize(() => this.isGeneratingAll.set(false)))
+      .subscribe();
   }
 
   protected handleExportAll(): void {
