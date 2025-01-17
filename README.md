@@ -27,4 +27,4 @@ The TTS service makes a request to the IBM Watson API, passing the text to be sy
 2. Clone your forked repository to your local machine.
 3. Install the dependencies using `npm install`.
 4. Make your changes and create a new branch.
-5. Submit a pull request to the original repository.****
+5. Submit a pull request to the original repository.
