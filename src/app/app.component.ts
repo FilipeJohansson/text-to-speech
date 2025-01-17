@@ -36,7 +36,7 @@ export class AppComponent {
           const color: string = '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1,6)
           return {
             id: wv.name,
-            name: wv.name,
+            name: wv.name.split('_')[1].replace('Voice', ''),
             color,
             language: wv.language,
           };
