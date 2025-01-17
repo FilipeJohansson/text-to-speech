@@ -1,59 +1,30 @@
-# TextToSpeech
+# Text-to-Speech Generator
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.7.
+<img src="doc/images/homepage.png" width="800"/>
 
-## Development server
+This project was developed to generate audio tracks with different voices, based on a text script. The main goal was to learn how to use a TTS (Text-to-Speech) AI, specifically using IBM Watson TTS.
 
-To start a local development server, run:
+## How to Use
 
-```bash
-ng serve
-```
+### Prerequisites
+1. Create an IBM Cloud account.
+2. Activate the Text-to-Speech service.
+3. Obtain the API URL and API Key generated in IBM Cloud.
+4. In the `text-to-speech.service.ts` file, insert the API URL in the `#apiUrl` field and the API Key in the `#apiKey` field.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Features
+- When pressing Enter in the text field, a new text block will be created, allowing you to generate a new TTS with a different voice.
+- The list of generated audios will be displayed to the right of the text block, allowing you to listen to or download each generated audio.
 
-## Code scaffolding
+### Interface
+The interface consists of a text field where the user can type the script. Each text block can be configured with a different voice. To the right of the text block, the generated audios are listed and can be played or downloaded.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### How it Works
+The TTS service makes a request to the IBM Watson API, passing the text to be synthesized and the selected voice. The generated audio is then made available to the user, who can interact with it by listening or downloading it.
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Contributing
+1. Fork the repository to your GitHub account.
+2. Clone your forked repository to your local machine.
+3. Install the dependencies using `npm install`.
+4. Make your changes and create a new branch.
+5. Submit a pull request to the original repository.****
