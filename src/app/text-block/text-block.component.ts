@@ -108,7 +108,20 @@ export class TextBlockComponent {
     audio.play();
   }
 
+  protected downloadAudio(url: string, filename: string): void {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+  }
+
   protected deleteAudio(index: number): void {
+    URL.revokeObjectURL(this.block().audioUrls[index].url);
+
     this.update.emit({
       ...this.block(),
       audioUrls: this.block().audioUrls.filter((_, i) => i !== index),

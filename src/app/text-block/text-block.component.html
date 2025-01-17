@@ -113,6 +113,7 @@
                                 [name]="'Audio ' + ($index + 1)"
                                 [voiceColor]="audio.voiceColor"
                                 (play)="playAudio(audio.url)"
+                                (download)="downloadAudio(audio.url, 'Audio ' + ($index + 1))"
                                 (delete)="deleteAudio($index)"
                             />
                         }
